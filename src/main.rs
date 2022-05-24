@@ -34,7 +34,12 @@ fn main() {
     let mut wood_plates: Vec<&Rectangle> = Vec::new();
     // face plate
     let face_plate: Rectangle = Rectangle {
+        // The inner width of the display case
+        // + 2 times the thickness of the perspex material (for each side wall).
         width: args.width + 2 * args.perspex_thickness,
+        // The inner height of the display case
+        // + the thickness of the perspex material for the top plate
+        // + the thickness of wood for the inner wood base piece.
         height: args.height + args.perspex_thickness + args.wood_thickness,
     };
     println!("Face plate: {:?}", face_plate);
@@ -42,7 +47,12 @@ fn main() {
 
     // back plate
     let back_plate: Rectangle = Rectangle {
+        // The inner width of the display case
+        // + 2 times the thickness of the perspex material (for each side wall).
         width: args.width + 2 * args.perspex_thickness,
+        // The inner height of the display case
+        // + the thickness of the perspex material for the top plate
+        // + the thickness of wood for the inner wood base piece.
         height: args.height + args.perspex_thickness + args.wood_thickness,
     };
     println!("Back plate: {:?}", back_plate);
@@ -50,7 +60,10 @@ fn main() {
 
     // side plates
     let side_plate: Rectangle = Rectangle {
+        // The inner depth of the display case.
         width: args.depth,
+        // The inner height of the display case
+        // + the thickness of wood for the inner wood base piece.
         height: args.height + args.wood_thickness,
     };
     println!("Side plates: {:?}", side_plate);
@@ -59,6 +72,8 @@ fn main() {
 
     // top plate
     let top_plate: Rectangle = Rectangle {
+        // The inner width of the display case
+        // + 2 times the thickness of the perspex material (for each side wall).
         width: args.width + 2 * args.perspex_thickness,
         height: args.depth,
     };
@@ -67,7 +82,9 @@ fn main() {
 
     // inner base plate
     let inner_base_plate: Rectangle = Rectangle {
+        // The inner width of the display case.
         width: args.width,
+        // The inner depth of the display case.
         height: args.depth,
     };
     println!("Inner base plate: {:?}", inner_base_plate);
@@ -75,7 +92,12 @@ fn main() {
 
     // actual base plate
     let actual_base_plate: Rectangle = Rectangle {
+        // The inner width of the display case
+        // + 2 times the thickness of the perspex material (for each side wall).
         width: args.width + 2 * args.perspex_thickness,
+        // The inner width of the display case
+        // + thickness of the perspex material for the face plate
+        // + thickness of the wood material for the back plate.
         height: args.depth + args.perspex_thickness + args.wood_thickness,
     };
     println!("Actual base plate: {:?}", actual_base_plate);
@@ -107,7 +129,6 @@ fn write_out_to_svg(rectangles: &Vec<&Rectangle>, file_name: &str) {
             .close();
 
         let path = Path::new()
-            // .set()
             .set("fill", "none")
             .set("stroke", "black")
             .set("stroke-width", 0.05)
