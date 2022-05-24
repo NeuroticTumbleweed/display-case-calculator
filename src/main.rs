@@ -48,7 +48,7 @@ fn main() {
     // side plates
     let side_plate: Rectangle = Rectangle {
         width: args.depth,
-        height: args.height,
+        height: args.height + args.wood_thickness,
     };
     println!("Side plates: {:?}", side_plate);
     all_plates.push(&side_plate);
