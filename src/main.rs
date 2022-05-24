@@ -1,3 +1,5 @@
+use std::fs;
+
 use clap::Parser;
 use svg::node::element::path::Data;
 use svg::node::element::Path;
@@ -28,14 +30,15 @@ fn main() {
     let args: Args = Args::parse();
 
     println!("{:?}", &args);
-    let mut all_plates: Vec<&Rectangle> = Vec::new();
+    let mut perspex_plates: Vec<&Rectangle> = Vec::new();
+    let mut wood_plates: Vec<&Rectangle> = Vec::new();
     // face plate
     let face_plate: Rectangle = Rectangle {
         width: args.width + 2 * args.perspex_thickness,
         height: args.height + args.perspex_thickness + args.wood_thickness,
     };
     println!("Face plate: {:?}", face_plate);
-    all_plates.push(&face_plate);
+    perspex_plates.push(&face_plate);
 
     // back plate
     let back_plate: Rectangle = Rectangle {
@@ -43,7 +46,7 @@ fn main() {
         height: args.height + args.perspex_thickness + args.wood_thickness,
     };
     println!("Back plate: {:?}", back_plate);
-    all_plates.push(&back_plate);
+    wood_plates.push(&back_plate);
 
     // side plates
     let side_plate: Rectangle = Rectangle {
@@ -51,8 +54,8 @@ fn main() {
         height: args.height + args.wood_thickness,
     };
     println!("Side plates: {:?}", side_plate);
-    all_plates.push(&side_plate);
-    all_plates.push(&side_plate);
+    perspex_plates.push(&side_plate);
+    perspex_plates.push(&side_plate);
 
     // top plate
     let top_plate: Rectangle = Rectangle {
@@ -60,7 +63,7 @@ fn main() {
         height: args.depth,
     };
     println!("Top plate: {:?}", top_plate);
-    all_plates.push(&top_plate);
+    perspex_plates.push(&top_plate);
 
     // inner base plate
     let inner_base_plate: Rectangle = Rectangle {
@@ -68,7 +71,7 @@ fn main() {
         height: args.depth,
     };
     println!("Inner base plate: {:?}", inner_base_plate);
-    all_plates.push(&inner_base_plate);
+    wood_plates.push(&inner_base_plate);
 
     // actual base plate
     let actual_base_plate: Rectangle = Rectangle {
@@ -76,11 +79,13 @@ fn main() {
         height: args.depth + args.perspex_thickness + args.wood_thickness,
     };
     println!("Actual base plate: {:?}", actual_base_plate);
-    all_plates.push(&actual_base_plate);
-    write_out_to_svg(&all_plates);
+    wood_plates.push(&actual_base_plate);
+    fs::create_dir_all("plates").unwrap();
+    write_out_to_svg(&perspex_plates, "plates/perspex.svg");
+    write_out_to_svg(&wood_plates, "plates/wood.svg");
 }
 
-fn write_out_to_svg(rectangles: &Vec<&Rectangle>) {
+fn write_out_to_svg(rectangles: &Vec<&Rectangle>, file_name: &str) {
     let mut document = Document::new();
 
     let mut move_coords = (10, 10);
@@ -136,5 +141,5 @@ fn write_out_to_svg(rectangles: &Vec<&Rectangle>) {
         .set("width", format!("{}mm", max_horz + 10))
         .set("height", format!("{}mm", total_height + 10));
 
-    svg::save("image.svg", &document).unwrap();
+    svg::save(file_name, &document).unwrap();
 }
